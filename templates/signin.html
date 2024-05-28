@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+<!-- on appelle le base.html qui contient l'en-tête et le pied de page -->
+
+{% block content %}
+
+{% include "header.html" %}
+<section  class="bg-dark text-light p-5 text-center Header">
+    <div class="container border border-white pb-3 rounded-3">
+        <div class="p-2">
+            <h3 class="titleDaisyLead fw-bolder">Sign In</h3>
+            <!-- declaration de token -->
+            {% csrf_token %}
+        </div>
+    </div>
+</section>
+<section class="m-3 py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 col-lg-6 m-auto">
+                <div class="card">
+                    <div class="card-title m-2 fw-bolder">
+                        SignIn Form
+                        <hr>
+                    </div>
+                    <div class="card-body text-start">
+                        <form action="">
+                            <div class="form-group mt-2">
+                                <label for="" class="label-form">First Name</label>
+                                <input type="text" name="" id="first_name" class="form-control">
+                            </div>
+                            <div class="form-group mt-2">
+                                <label for="" class="label-form">Last Name</label>
+                                <input type="text" name="" id="last_name" class="form-control">
+                            </div>
+                            <div class="form-group mt-2">
+                                <label for="" class="label-form">Phone</label>
+                                <input type="text" name="" id="phone" class="form-control">
+                            </div>
+                            <div class="form-group mt-2">
+                                <label for="" class="label-form">Email</label>
+                                <input type="text" name="" id="email" class="form-control">
+                            </div>
+                            <div class="form-group mt-2">
+                                <label for="" class="label-form">Password</label>
+                                <input type="text" name="" id="password" class="form-control">
+                            </div>
+<div class="form-group mt-2"><input type="button"  onclick="signIng()" value="Sign In " class="btn btn-dark w-100"></div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
