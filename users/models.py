@@ -7,6 +7,9 @@ class User(models.Model):
     email=models.CharField(max_length=50)
     password=models.CharField(max_length=50)
     phone=models.CharField(max_length=50)
+    status=models.CharField(max_length=50)
+    role=models.CharField(max_length=50)
+    
     def __str__(self):
         return self.first_name+" "+self.last_name
 # Create your models here.

@@ -22,11 +22,16 @@ def loginUser(request):
             "message":"The email or the password is wrong !!"
         })
     u=User.objects.filter(email=email,password=md5_hash.hexdigest()).first()
+    u.status="Connected"
+    u.save()
     request.session['first_name']=u.first_name
     request.session['last_name']=u.last_name
     request.session['email']=u.email
     request.session['password']=u.password
     request.session['phone']=u.phone
+    request.session['status']=u.status
+    request.session['role']=u.role
+    
     return JsonResponse({
             "type":"Success",
             "message":"Connected with Success"
@@ -58,7 +63,7 @@ def signinUser(request):
                     })
     md5_hash = hashlib.md5()
     md5_hash.update(password.encode('utf-8'))
-    u=User(first_name=first_name,last_name=last_name,phone=phone,email=email,password=md5_hash.hexdigest())
+    u=User(status="Disconnected",role="user",first_name=first_name,last_name=last_name,phone=phone,email=email,password=md5_hash.hexdigest())
     u.save()
     return JsonResponse({
                         "type": "Success",
