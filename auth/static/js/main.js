@@ -76,3 +76,39 @@ function signIng(){
     }
    
 }
+function submitQualification(){
+    var name=document.getElementById("name").value;
+    var Description=document.getElementById("Description").value;
+    var color=document.getElementById("color").value;
+    if(name!="" && Description!="" && color!=""){
+        var f=new FormData()
+        f.append("name",name)
+        f.append("Description",Description);
+        f.append("color",color);
+        f.append("csrfmiddlewaretoken",token)
+
+        var xhr=new XMLHttpRequest();
+        xhr.onreadystatechange=function(){
+            if(this.status==200 && this.readyState==4){
+                var {message,type}=JSON.parse(this.responseText);
+                if(type=="Success"){
+                    
+                    toastr.success(message,type,{positionClass:"toast-bottom-right"});
+                    document.getElementById("name").value="";
+                    document.getElementById("Description").value="";
+                    document.getElementById("color").value="";
+                }
+                if(type=="Warning")
+                     toastr.warning(message,type,{positionClass:"toast-bottom-right"});
+
+            }
+
+            }
+            xhr.open("POST","submitQualification",true);
+            xhr.send(f);
+            
+        
+    }else{
+        toastr.warning("All the fields are required !!","Warning",{positionClass:"toast-bottom-right"});
+    }
+}
