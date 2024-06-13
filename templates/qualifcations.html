@@ -10,21 +10,54 @@
             <h3 class="titleDaisyLead fw-bolder">Qualifications</h3>
             <!-- declaration de token -->
             {% csrf_token %}
+            <form action="">
+                <div class="row">
+                    <div class="col-md p-1"><input type="text" name="" id="name_search" class="form-control"></div>
+                    <div class="col-md p-1"><input type="text" name="" id="description_search" class="form-control"></div>
+                    <div class="col-md p-1"><input type="text" name="" id="color_search" class="form-control"></div>
+                </div>
+                <div class="row">
+                    <div class="col-md p-1">
+                        <input type="button" value="Search" onclick="getDataQulaifications()" class="btn btn-dark w-100"></div>
+
+                    </div>
+            </form>
         </div>
     </div>
 </section>
-<section class="m-3 py-5">
+<section class="py-5 pb-0">
     <div class="container">
-            <input type="button" data-bs-toggle="modal" data-bs-target="#modalDomain" value="Add" class="btn btn-dark">
+            <input type="button" data-bs-toggle="modal" onclick="hideDataQualifiation()" data-bs-target="#modalDomain" value="Add" class="btn btn-dark">
             
         </div>
+</section>
+<section class="py-5 mb-5">
+    <div class="container">
+        <div class="row">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Name</th>
+                        <th>Color</th>
+                        <th>Description</th>
+                        <th colspan="2"></th>
+                    </tr>
+                </thead>
+                <tbody id="dataQualification"></tbody>
+            </table>
+        </div>
+        <button onclick="navigateDataContacts('prev')" id="submitDomainbtn" type="button" class="btn btn-forms"><</button>
+        <button onclick="navigateDataContacts('next')" id="submitDomainbtn" type="button" class="btn btn-forms">></button>
+
+    </div>
 </section>
 <div class="modal fade" id="modalDomain" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <h5>Formulaire d'appareils</h5>
-                <button class="btn-close" aria-label="close" data-bs-dismiss="modal" onclick="hideDataDevice()"></button>
+                <button class="btn-close" aria-label="close" data-bs-dismiss="modal" onclick="hideDataQualifiation()"></button>
             </div>
             <div class="modal-body">
                 <form>

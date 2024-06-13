@@ -1,4 +1,6 @@
 var token=document.getElementsByName('csrfmiddlewaretoken')[0].value
+var id_qualification=0
+var offset_qualification=0
 function loginUser(){
     var email=document.getElementById("email").value;
     var password=document.getElementById("password").value;
@@ -83,10 +85,10 @@ function submitQualification(){
     if(name!="" && Description!="" && color!=""){
         var f=new FormData()
         f.append("name",name)
-        f.append("Description",Description);
+        f.append("DescriptionQ",Description);
         f.append("color",color);
         f.append("csrfmiddlewaretoken",token)
-
+        f.append("id",id_qualification);
         var xhr=new XMLHttpRequest();
         xhr.onreadystatechange=function(){
             if(this.status==200 && this.readyState==4){
@@ -97,6 +99,7 @@ function submitQualification(){
                     document.getElementById("name").value="";
                     document.getElementById("Description").value="";
                     document.getElementById("color").value="";
+                    getDataQulaifications()
                 }
                 if(type=="Warning")
                      toastr.warning(message,type,{positionClass:"toast-bottom-right"});
@@ -112,3 +115,84 @@ function submitQualification(){
         toastr.warning("All the fields are required !!","Warning",{positionClass:"toast-bottom-right"});
     }
 }
+function getDataQulaifications(){
+    
+
+
+var name=document.getElementById("name_search").value;
+var Description=document.getElementById("description_search").value;
+var color=document.getElementById("color_search").value;
+var f=new FormData()
+f.append("name",name)
+f.append("Description",Description)
+f.append("color",color)
+f.append("offset",offset_qualification);
+f.append("csrfmiddlewaretoken",token)
+var xhr=new XMLHttpRequest()
+xhr.onreadystatechange=function(){
+    if(this.status==200 && this.readyState==4){
+        var {message,data}=JSON.parse(this.responseText);
+        var dataFrontEnd=""
+        for(var i=0;i<data.length;i++){
+            dataFrontEnd+="<tr><td>"+data[i][0]+"</td>"
+            dataFrontEnd+="<td>"+data[i][1]+"</td>"
+            dataFrontEnd+="<td>"+data[i][2]+"</td>"
+            dataFrontEnd+="<td>"+data[i][3]+"</td>"
+            dataFrontEnd+="<td><ion-icon  class='Icon Icon_delete' onclick='deleteQualification("+data[i][0]+")' name='trash-outline'></ion-icon></td><td><ion-icon   class='Icon Icon_update' onclick='loadDataQualification("+JSON.stringify(data[i])+");' data-bs-toggle='modal' data-bs-target='#modalDomain' name='pencil-outline'></ion-icon></td>"
+            dataFrontEnd+="</tr>"
+        }
+        document.getElementById("dataQualification").innerHTML=dataFrontEnd
+    }
+}
+xhr.open("POST","getDataQualifications",true);
+xhr.send(f);
+}
+function deleteQualification(id){
+    var f=new FormData()
+    f.append("id",id)
+    f.append("csrfmiddlewaretoken",token)
+    var xhr=new XMLHttpRequest()
+    xhr.onreadystatechange=function(){
+        if(this.status==200 && this.readyState==4){
+            var {message,type}=JSON.parse(this.responseText);
+            if(type=="Success"){
+                        
+                toastr.success(message,type,{positionClass:"toast-bottom-right"});
+                getDataQulaifications()
+            }
+            if(type=="Warning")
+                 toastr.warning(message,type,{positionClass:"toast-bottom-right"});
+
+
+        }
+    }
+    xhr.open("POST","deleteQualifications",true);
+    xhr.send(f);
+        
+}
+function loadDataQualification(data){
+    
+    document.getElementById("name").value=data[1];
+    document.getElementById("Description").value=data[2];
+    document.getElementById("color").value=data[3];
+    id_qualification=data[0]
+    document.getElementById("submitDeviceButton").innerHTML="Update";
+
+}
+function hideDataQualifiation(){
+    document.getElementById("name").value="";
+    document.getElementById("Description").value="";
+    document.getElementById("color").value="";
+    id_qualification=0
+    document.getElementById("submitDeviceButton").innerHTML="Add";
+}
+function navigateDataContacts(data){
+    if(data=="next"){
+        offset_qualification+=6
+    }
+    if(data=="prev" &&         offset_qualification>0){
+        offset_qualification-=6
+
+    }
+    getDataQulaifications();
+}   
