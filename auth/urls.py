@@ -6,5 +6,5 @@ urlpatterns = [
     path("",include("pages.urls")),
     path("",include("users.urls")),
     path("",include("qualifications.urls")),
-    # path("",include("auth.urls")),
-]
+    path("",include("categoryJob.urls"))    
+]   

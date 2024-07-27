@@ -24,6 +24,7 @@
 
             {% if request.session.first_name %}
             <li class='nav-item'><a href="#" class='nav-link active fw-bolder'>Welcome ({{request.session.first_name}})</a></li>  
+            <li class='nav-item'><a href="{% url 'Category' %}" class='nav-link active fw-bolder'>Category</a></li>  
             <li class='nav-item'><a href="{% url 'qualifcations' %}" class='nav-link active fw-bolder'>Qualifcations</a></li>  
             <li class='nav-item'><a href="{% url 'logout' %}" class='nav-link active fw-bolder'>Log Out</a></li>  
             {% else %}

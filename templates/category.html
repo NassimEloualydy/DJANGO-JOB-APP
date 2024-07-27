@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+<!-- on appelle le base.html qui contient l'en-tête et le pied de page -->
+
+{% block content %}
+
+{% include "header.html" %}
+<section  class="bg-dark text-light p-5 text-center Header">
+    <div class="container border border-white pb-3 rounded-3">
+        <div class="p-2">
+            <h3 class="titleDaisyLead fw-bolder">Categories</h3>
+            <!-- declaration de token -->
+            {% csrf_token %}
+            <form action="">
+                <div class="row">
+                    <div class="col-md p-1"><input type="text" name="" id="name_search" class="form-control"></div>
+                    <div class="col-md p-1"><input type="text" name="" id="description_search" class="form-control"></div>
+                    <div class="col-md p-1"><input type="text" name="" id="color_search" class="form-control"></div>
+                </div>
+                <div class="row">
+                    <div class="col-md p-1">
+                        <input type="button" value="Search" onclick="" class="btn btn-dark w-100"></div>
+
+                    </div>
+            </form>
+        </div>
+    </div>
+</section>
+<section class="py-5 pb-0">
+    <div class="container">
+            <input type="button" data-bs-toggle="modal" onclick="" data-bs-target="#modalDomain" value="Add" class="btn btn-dark">
+            
+        </div>
+</section>
+<section class="py-5 mb-5">
+    <div class="container">
+        <div class="row">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Name</th>
+                        <th>Color</th>
+                        <th>Description</th>
+                        <th colspan="2"></th>
+                    </tr>
+                </thead>
+                <tbody id="dataQualification"></tbody>
+            </table>
+        </div>
+        <button onclick="navigateDataCategory('prev')" id="submitDomainbtn" type="button" class="btn btn-forms"><</button>
+        <button onclick="navigateDataCategory('next')" id="submitDomainbtn" type="button" class="btn btn-forms">></button>
+
+    </div>
+</section>
+<div class="modal fade" id="modalDomain" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5>Formulaire d'appareils</h5>
+                <button class="btn-close" aria-label="close" data-bs-dismiss="modal" onclick="hideDataQualifiation()"></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="row">
+                        {% csrf_token %}
+                        <!-- le token qui permet de valider les donne envoyer -->
+
+                        <label for="" class="label-control">Name</label>
+                        <div class="col-md mt-2"><input type="text" name="" id="name" class="form-control"></div>
+                    </div>
+                    <div class="row">
+                        <label for="" class="label-control mt-2">Description</label>
+                        
+                        <div class="col-md mt-2"><input type="text" name="" id="Description" class="form-control"></div>
+                    </div>
+
+                    <div class="row">
+                        <label for="" class="label-control mt-2">Color</label>
+                        
+                        <div class="col-md mt-2"><input type="text" name="" id="color" class="form-control"></div>
+                    </div>
+
+ 
+                    <div class="row">
+                        <div class="col-md mt-2"><button onclick="submitQualification()" id="submitDeviceButton" type="button" class="btn btn-forms">Add</button></div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

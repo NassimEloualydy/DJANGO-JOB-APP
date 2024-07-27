@@ -133,15 +133,20 @@ xhr.onreadystatechange=function(){
     if(this.status==200 && this.readyState==4){
         var {message,data}=JSON.parse(this.responseText);
         var dataFrontEnd=""
-        for(var i=0;i<data.length;i++){
-            dataFrontEnd+="<tr><td>"+data[i][0]+"</td>"
-            dataFrontEnd+="<td>"+data[i][1]+"</td>"
-            dataFrontEnd+="<td>"+data[i][2]+"</td>"
-            dataFrontEnd+="<td>"+data[i][3]+"</td>"
-            dataFrontEnd+="<td><ion-icon  class='Icon Icon_delete' onclick='deleteQualification("+data[i][0]+")' name='trash-outline'></ion-icon></td><td><ion-icon   class='Icon Icon_update' onclick='loadDataQualification("+JSON.stringify(data[i])+");' data-bs-toggle='modal' data-bs-target='#modalDomain' name='pencil-outline'></ion-icon></td>"
-            dataFrontEnd+="</tr>"
+        if(data.length>0){
+            for(var i=0;i<data.length;i++){
+                dataFrontEnd+="<tr><td>"+data[i][0]+"</td>"
+                dataFrontEnd+="<td>"+data[i][1]+"</td>"
+                dataFrontEnd+="<td>"+data[i][2]+"</td>"
+                dataFrontEnd+="<td>"+data[i][3]+"</td>"
+                dataFrontEnd+="<td><ion-icon  class='Icon Icon_delete' onclick='deleteQualification("+data[i][0]+")' name='trash-outline'></ion-icon></td><td><ion-icon   class='Icon Icon_update' onclick='loadDataQualification("+JSON.stringify(data[i])+");' data-bs-toggle='modal' data-bs-target='#modalDomain' name='pencil-outline'></ion-icon></td>"
+                dataFrontEnd+="</tr>"
+            }
+            document.getElementById("dataQualification").innerHTML=dataFrontEnd
+        }else{
+            offset_qualification-=6
+            getDataQulaifications()
         }
-        document.getElementById("dataQualification").innerHTML=dataFrontEnd
     }
 }
 xhr.open("POST","getDataQualifications",true);
@@ -190,7 +195,7 @@ function navigateDataContacts(data){
     if(data=="next"){
         offset_qualification+=6
     }
-    if(data=="prev" &&         offset_qualification>0){
+    if(data=="prev" && offset_qualification>0){
         offset_qualification-=6
 
     }
