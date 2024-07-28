@@ -116,41 +116,42 @@ function submitQualification(){
     }
 }
 function getDataQulaifications(){
-    
+if(document.getElementById("dataQualification")){
 
-
-var name=document.getElementById("name_search").value;
-var Description=document.getElementById("description_search").value;
-var color=document.getElementById("color_search").value;
-var f=new FormData()
-f.append("name",name)
-f.append("Description",Description)
-f.append("color",color)
-f.append("offset",offset_qualification);
-f.append("csrfmiddlewaretoken",token)
-var xhr=new XMLHttpRequest()
-xhr.onreadystatechange=function(){
-    if(this.status==200 && this.readyState==4){
-        var {message,data}=JSON.parse(this.responseText);
-        var dataFrontEnd=""
-        if(data.length>0){
-            for(var i=0;i<data.length;i++){
-                dataFrontEnd+="<tr><td>"+data[i][0]+"</td>"
-                dataFrontEnd+="<td>"+data[i][1]+"</td>"
-                dataFrontEnd+="<td>"+data[i][2]+"</td>"
-                dataFrontEnd+="<td>"+data[i][3]+"</td>"
-                dataFrontEnd+="<td><ion-icon  class='Icon Icon_delete' onclick='deleteQualification("+data[i][0]+")' name='trash-outline'></ion-icon></td><td><ion-icon   class='Icon Icon_update' onclick='loadDataQualification("+JSON.stringify(data[i])+");' data-bs-toggle='modal' data-bs-target='#modalDomain' name='pencil-outline'></ion-icon></td>"
-                dataFrontEnd+="</tr>"
+    var name=document.getElementById("name_search").value;
+    var Description=document.getElementById("description_search").value;
+    var color=document.getElementById("color_search").value;
+    var f=new FormData()
+    f.append("name",name)
+    f.append("Description",Description)
+    f.append("color",color)
+    f.append("offset",offset_qualification);
+    f.append("csrfmiddlewaretoken",token)
+    var xhr=new XMLHttpRequest()
+    xhr.onreadystatechange=function(){
+        if(this.status==200 && this.readyState==4){
+            var {message,data}=JSON.parse(this.responseText);
+            var dataFrontEnd=""
+            if(data.length>0){
+                for(var i=0;i<data.length;i++){
+                    dataFrontEnd+="<tr><td>"+data[i][0]+"</td>"
+                    dataFrontEnd+="<td>"+data[i][1]+"</td>"
+                    dataFrontEnd+="<td>"+data[i][2]+"</td>"
+                    dataFrontEnd+="<td>"+data[i][3]+"</td>"
+                    dataFrontEnd+="<td><ion-icon  class='Icon Icon_delete' onclick='deleteQualification("+data[i][0]+")' name='trash-outline'></ion-icon></td><td><ion-icon   class='Icon Icon_update' onclick='loadDataQualification("+JSON.stringify(data[i])+");' data-bs-toggle='modal' data-bs-target='#modalDomain' name='pencil-outline'></ion-icon></td>"
+                    dataFrontEnd+="</tr>"
+                }
+                document.getElementById("dataQualification").innerHTML=dataFrontEnd
+            }else{
+                offset_qualification-=6
+                getDataQulaifications()
             }
-            document.getElementById("dataQualification").innerHTML=dataFrontEnd
-        }else{
-            offset_qualification-=6
-            getDataQulaifications()
         }
     }
+    xhr.open("POST","getDataQualifications",true);
+    xhr.send(f);
 }
-xhr.open("POST","getDataQualifications",true);
-xhr.send(f);
+
 }
 function deleteQualification(id){
     var f=new FormData()
@@ -201,3 +202,31 @@ function navigateDataContacts(data){
     }
     getDataQulaifications();
 }   
+function submitCategory(){
+    var name=document.getElementById("name").value;
+    var description=document.getElementById("description").value;
+    if(name!="" && description!=""){
+        var xhr=new XMLHttpRequest();
+        xhr.onreadystatechange=function(){
+            if(this.status==200 && this.readyState==4){
+                var {message,type}=JSON.parse(this.responseText);
+                if(type=="Success"){
+                            
+                    toastr.success(message,type,{positionClass:"toast-bottom-right"});
+                    getDataQulaifications()
+                }
+                if(type=="Warning")
+                     toastr.warning(message,type,{positionClass:"toast-bottom-right"});
+    
+               }
+        }
+        xhr.open("POST","addCategory",true);
+        var f=new FormData();
+        f.append("name",name);
+        f.append("description",description);
+        f.append("csrfmiddlewaretoken",token)
+        xhr.send(f)
+    }else{
+        toastr.warning("Please all the field required !!","Warning",{positionClass:"toast-bottom-right"})
+    }
+}
