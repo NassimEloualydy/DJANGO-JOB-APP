@@ -1,6 +1,7 @@
 var token=document.getElementsByName('csrfmiddlewaretoken')[0].value
 var id_qualification=0
 var offset_qualification=0
+var offset_category=0
 function loginUser(){
     var email=document.getElementById("email").value;
     var password=document.getElementById("password").value;
@@ -220,13 +221,48 @@ function submitCategory(){
     
                }
         }
-        xhr.open("POST","addCategory",true);
         var f=new FormData();
         f.append("name",name);
         f.append("description",description);
         f.append("csrfmiddlewaretoken",token)
+        xhr.open("POST","addCategory",true);
         xhr.send(f)
     }else{
         toastr.warning("Please all the field required !!","Warning",{positionClass:"toast-bottom-right"})
     }
 }
+
+function getDataCategories(){
+    if(document.getElementById("dataCategories")){
+        var name=document.getElementById("name_search").value;
+        var Description=document.getElementById("description_search").value;
+        var f=new FormData()
+        f.append("name",name)
+        f.append("Description",Description)
+        f.append("offset",offset_category);
+        f.append("csrfmiddlewaretoken",token)
+        var xhr=new XMLHttpRequest()
+        xhr.onreadystatechange=function(){
+            if(this.status==200 && this.readyState==4){
+                var {message,data}=JSON.parse(this.responseText);
+                var dataFrontEnd=""
+                if(data.length>0){
+                    for(var i=0;i<data.length;i++){
+                        dataFrontEnd+="<tr><td>"+data[i][0]+"</td>"
+                        dataFrontEnd+="<td>"+data[i][1]+"</td>"
+                        dataFrontEnd+="<td>"+data[i][2]+"</td>"
+                        dataFrontEnd+="<td><ion-icon  class='Icon Icon_delete' onclick='deleteQualification("+data[i][0]+")' name='trash-outline'></ion-icon></td><td><ion-icon   class='Icon Icon_update' onclick='loadDataQualification("+JSON.stringify(data[i])+");' data-bs-toggle='modal' data-bs-target='#modalDomain' name='pencil-outline'></ion-icon></td>"
+                        dataFrontEnd+="</tr>"
+                    }
+                    document.getElementById("dataCategories").innerHTML=dataFrontEnd
+                }else{
+                    offset_qualification-=6
+                    getDataQulaifications()
+                }
+            }
+        }
+        xhr.open("POST","getdataCategories",true);
+        xhr.send(f);
+    }
+    
+    }
