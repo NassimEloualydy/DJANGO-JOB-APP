@@ -1,5 +1,6 @@
 var token=document.getElementsByName('csrfmiddlewaretoken')[0].value
 var id_qualification=0
+var id_category=0
 var offset_qualification=0
 var offset_category=0
 function loginUser(){
@@ -214,7 +215,7 @@ function submitCategory(){
                 if(type=="Success"){
                             
                     toastr.success(message,type,{positionClass:"toast-bottom-right"});
-                    getDataQulaifications()
+                    getDataCategories()
                 }
                 if(type=="Warning")
                      toastr.warning(message,type,{positionClass:"toast-bottom-right"});
@@ -225,6 +226,7 @@ function submitCategory(){
         f.append("name",name);
         f.append("description",description);
         f.append("csrfmiddlewaretoken",token)
+        f.append("id",id_category);
         xhr.open("POST","addCategory",true);
         xhr.send(f)
     }else{
@@ -251,13 +253,17 @@ function getDataCategories(){
                         dataFrontEnd+="<tr><td>"+data[i][0]+"</td>"
                         dataFrontEnd+="<td>"+data[i][1]+"</td>"
                         dataFrontEnd+="<td>"+data[i][2]+"</td>"
-                        dataFrontEnd+="<td><ion-icon  class='Icon Icon_delete' onclick='deleteQualification("+data[i][0]+")' name='trash-outline'></ion-icon></td><td><ion-icon   class='Icon Icon_update' onclick='loadDataQualification("+JSON.stringify(data[i])+");' data-bs-toggle='modal' data-bs-target='#modalDomain' name='pencil-outline'></ion-icon></td>"
+                        dataFrontEnd+="<td><ion-icon  class='Icon Icon_delete' onclick='deleteCategory("+data[i][0]+")' name='trash-outline'></ion-icon></td><td><ion-icon   class='Icon Icon_update' onclick='loadDataCategory("+JSON.stringify(data[i])+");' data-bs-toggle='modal' data-bs-target='#modalDomain' name='pencil-outline'></ion-icon></td>"
                         dataFrontEnd+="</tr>"
                     }
                     document.getElementById("dataCategories").innerHTML=dataFrontEnd
                 }else{
-                    offset_qualification-=6
-                    getDataQulaifications()
+                    if(message=="full"){
+                        offset_qualification-=6
+                        getDataQulaifications()
+                    }else{
+                        document.getElementById("dataCategories").innerHTML=""
+                    }
                 }
             }
         }
@@ -266,3 +272,42 @@ function getDataCategories(){
     }
     
     }
+function deleteCategory(id){
+    var f=new FormData()
+    f.append("id",id)
+    f.append("csrfmiddlewaretoken",token)
+    var xhr=new XMLHttpRequest()
+    xhr.onreadystatechange=function(){
+        if(this.status==200 && this.readyState==4){
+            var {message,type}=JSON.parse(this.responseText);
+            if(type=="Success"){
+                        
+                toastr.success(message,type,{positionClass:"toast-bottom-right"});
+                getDataCategories()
+                
+            }
+            if(type=="Warning")
+                 toastr.warning(message,type,{positionClass:"toast-bottom-right"});
+
+
+        }
+    }
+    xhr.open("POST","deleteCategory",true);
+    xhr.send(f);
+
+}
+function loadDataCategory(data){
+    
+    document.getElementById("name").value=data[1];
+    document.getElementById("description").value=data[2];
+    id_category=data[0]
+    document.getElementById("submitDeviceButton").innerHTML="Update";
+
+}
+
+function hideDataCaegory(){
+    document.getElementById("name").value="";
+    document.getElementById("description").value="";
+    id_category=0
+    document.getElementById("submitDeviceButton").innerHTML="Add";
+}
